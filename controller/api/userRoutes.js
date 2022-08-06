@@ -1,18 +1,42 @@
+const { User } = require("../../models");
 const router = require("express").Router();
-const bcrypt = require("bcrypt");
-const { User } = require('../../models');
 
-
-router.post("/", async (req, res) => {
+router.post('/', async(req, res)=>{
     try {
-        newlogin = require.body;
-        newlogin.password = awaits bcrypt.hash(req.body.password, 20);
-        const loginData = await login.create(newlogin);
+        const loginData = await User.create(req.body)
+
+        req.session.save(()=>{
+            req.session.user
+        })
+
     } catch (error) {
-        res.status(400).json(err)
+        
     }
 
-});
+
+}
+
+router.post('./login', async(req, res) => {
+    try {
+    
+} catch (error) {
+    
+}
 
 
-module.exports = login;
+
+
+} )
+
+router.post('./logout', async(req, res)=>{
+    try {
+        
+    } catch (error) {
+        
+    }
+
+
+
+
+
+})
