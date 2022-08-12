@@ -1,5 +1,6 @@
 const { User } = require('../../models');
 const router = require('express').Router();
+const nodemailer = require("nodemailer");
 
 router.post('/', async (req, res) => {
 	try {
@@ -15,6 +16,7 @@ router.post('/', async (req, res) => {
 		res.status(400).json(error);
 	}
 });
+
 
 router.post('./login', async (req, res) => {
 	try {
