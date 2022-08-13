@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const bodyParser = require('body-parser');
 
 const loginFormHandler = async (event) => {
   event.preventDefault();
@@ -25,42 +26,7 @@ const loginFormHandler = async (event) => {
 };
 console.log("Logged In Successfully");
 
-function sendEmails() {
-  // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    service: "outlook",
-    // secure: false, // true for 465, false for other ports
-    auth: {
-      user: "KnowledgeBaseacct@outlook.com", // generated ethereal user
-      pass: "PassWord4321!", //' generated ethereal password
-    },
-  });
 
-  // send mail with defined transport object
-  const emails = {
-    from: "knowledgebaseacct@outlook.com", // sender address
-    to: "Solen.Iyassu@gmail.com, baz@example.com", // list of receivers
-    subject: "Welcome to KnowledgeBase ✔", // Subject line
-    text: "Thank you for joining KnowledgeBase", // plain text body
-    // html body
-  };
-
-  transporter.sendMail(emails, function (error, info) {
-    if (error) {
-      console.log(err);
-      return;
-    }
-
-    // console.log("Message sent: %s", info.messageId);
-    // // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-    // Preview only available when sending through an Ethereal account
-    console.log(`sent:$ {info}.response`);
-    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-  });
-}
-
-// main().catch(console.error);
 
 const signupFormHandler = async (event) => {
   event.preventDefault();
@@ -86,6 +52,39 @@ const signupFormHandler = async (event) => {
     }
   }
 };
+function sendEmails() {
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    host: "https://outlook.live.com/mail/0/",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: 'KnowledgeBaseAcct@outlook.com', // generated ethereal user
+      pass: 'PassWord4321!', // generated ethereal password
+    },
+    tls: {
+      rejectUnauthorized:false
+    }
+  });
+
+  // send mail with defined transport object
+  let info = await transporter.sendMail({
+    from: '"Nodemailer" <KnowledgeBaseAcct@outlook.com.com>', // sender address
+    to: "Solen.Iyassu@gmail.com, baz@example.com", // list of receivers
+    subject: "Welcome to KnowledgeBase ✔", // Subject line
+    text: "Thank you for joining Knowledge Base. We want to welcome you to our site, feel free to use our services", // plain text body
+    html: output, // html body
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+  // Preview only available when sending through an Ethereal account
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+  res.render('contact', {msg:'Confirmation has been sent!'});
+}
+
+sendEmails().catch(console.error);
 
 document
   .querySelector(".login-form")
@@ -93,4 +92,4 @@ document
 
 document
   .querySelector(".signup-form")
-  .addEventListener("submit", signupFormHandler);
+  .addEventListener("submit", signupFormHandler, sendEmails);
